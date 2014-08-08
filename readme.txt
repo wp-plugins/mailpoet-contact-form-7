@@ -54,7 +54,7 @@ After installing & activating the plugin it's time to set up your form.
 
 == Changelog ==
 = 1.0.3 =
-* * Now compatible with the latest version of CF7 3.9
+* Now compatible with the latest version of CF7 3.9
 
 = 1.0.2 =
 * Fixed subscribers not being subscribed in the latest version 3.8.1 of CF7
