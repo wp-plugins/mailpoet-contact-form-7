@@ -19,6 +19,7 @@ function wpcf7_add_shortcode_mailpoetsignup() {
 }
 
 function wpcf7_mailpoetsignup_shortcode_handler( $tag ) {
+
 	$tag = new WPCF7_Shortcode( $tag );
 
 	if ( empty( $tag->name ) ) {
@@ -228,48 +229,49 @@ function wpcf7_mailpoet_before_send_mail( $contactform ) {
 function wpcf7_mailpoet_subscribe_to_lists($posted_data) {
 	// set defaults for mailpoet user data
 	$user_data = array(
-		'email' => "",
+		'email'	 => "",
 		'firstname' => "",
-		'lastname' => ""
+		'lastname'  => ""
 	);
 
 	// get form data
-	$user_data['email'] = isset( $posted_data['your-email'] ) ? trim( $posted_data['your-email'] ) : '';
-	$user_data['firstname'] = isset( $posted_data['your-name'] ) ? trim( $posted_data['your-name'] ) : '';
-	if ( isset( $posted_data['your-first-name'] ) && !empty( $posted_data['your-first-name'] ) ) {
-		$user_data['firstname'] = trim( $posted_data['your-first-name'] );
+	$user_data['email']	 = isset($posted_data['your-email']) ? trim($posted_data['your-email']) : '';
+	$user_data['firstname'] = isset($posted_data['your-name']) ? trim($posted_data['your-name']) : '';
+	if (isset($posted_data['your-first-name']) && !empty($posted_data['your-first-name'])) {
+		$user_data['firstname'] = trim($posted_data['your-first-name']);
 	}
-	if ( isset( $posted_data['your-last-name'] ) && !empty( $posted_data['your-last-name'] ) ) {
-		$user_data['lastname'] = trim( $posted_data['your-last-name'] );
-	}
-
-        // find all of the keys in $posted_data that belong to mailpoet-cf7's plugin
-        $keys = array_keys($posted_data);
-        $mailpoet_signups = preg_grep("/^mailpoetsignup.*/", $keys);
-        $mailpoet_lists = array();
-	if ( ! empty( $mailpoet_signups ) ) {
-                foreach($mailpoet_signups as $mailpoet_signup_field){
-                    $mailpoet_lists = array_unique( array_merge( $mailpoet_lists, explode( ",", $posted_data[$mailpoet_signup_field] ) ) );
-                }
-
-	} else {
-		// FYI an empty array is there just to add the user to MailPoet but not to any specific list
-		$mailpoet_lists = array();
+	if (isset($posted_data['your-last-name']) && !empty($posted_data['your-last-name'])) {
+		$user_data['lastname'] = trim($posted_data['your-last-name']);
 	}
 
+	// find all of the keys in $posted_data that belong to mailpoet-cf7's plugin
+	$keys			 = array_keys($posted_data);
+	$mailpoet_signups = preg_grep("/^mailpoetsignup.*/", $keys);
+	$mailpoet_lists   = array( );
+	if (!empty($mailpoet_signups)) {
+		foreach ($mailpoet_signups as $mailpoet_signup_field) {
+			$_field = trim($posted_data[$mailpoet_signup_field]);
+			if (!empty($_field)) {
+				$mailpoet_lists = array_unique(array_merge($mailpoet_lists, explode(",", $posted_data[$mailpoet_signup_field])));
+			}
+		}
+	}
+
+	if (empty($mailpoet_lists)) {
+		return;
+	}
 	// configure the list
 	$data = array(
-		'user' => $user_data,
+		'user'	  => $user_data,
 		'user_list' => array( 'list_ids' => $mailpoet_lists )
 	);
 
 	// if akismet is set make sure it's valid
-	$akismet = isset( $contactform->akismet ) ? (array) $contactform->akismet : null;
-	$akismet = $akismet;// temporarily, not in use!
-
+	$akismet = isset($contactform->akismet) ? (array)$contactform->akismet : null;
+	$akismet = $akismet; // temporarily, not in use!
 	// add the subscriber to the Wysija list
-	$user_helper = WYSIJA::get('user','helper');
-	$user_helper->addSubscriber( $data );
+	$user_helper = WYSIJA::get('user', 'helper');
+	$user_helper->addSubscriber($data);
 }
 
 

@@ -3,8 +3,8 @@ Contributors: bftrick, wysija
 Donate link: http://www.patrickrauland.com
 Tags: form, forms, contact form, mailpoet, wysija, contact form 7, newsletters, email
 Requires at least: 3.7.1
-Tested up to: 3.9.1
-Stable tag: 1.0.3
+Tested up to: 3.9.2
+Stable tag: 1.0.4
 
 License: GPLv2 or later
 
@@ -53,6 +53,9 @@ After installing & activating the plugin it's time to set up your form.
 
 
 == Changelog ==
+= 1.0.4 =
+* Fix users are always forced to subscribe to Mailpoet
+
 = 1.0.3 =
 * Now compatible with the latest version of CF7 3.9
 
