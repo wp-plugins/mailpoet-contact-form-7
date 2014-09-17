@@ -310,4 +310,67 @@ function wpcf7_mailpoetsignup_get_list_input_field_name ( ) {
 }
 
 
+
+add_filter( 'wpcf7_mail_tag_replaced', 'wpcf7_mail_tag_replaced_mailpoetsignup', 10, 2 );
+/**
+ *
+ * @param string $replaced modifier
+ * @param string $submitted submitted value from contact form
+ * @return string
+ */
+function wpcf7_mail_tag_replaced_mailpoetsignup($replaced, $submitted) {
+	if (wpcf7_is_mailpoetsignup_element($submitted)) {
+		$list_names = wpcf7_get_list_names(explode(',', $submitted));
+		$replaced = implode(', ', $list_names);
+	}
+	return $replaced;
+}
+
+/**
+ * Get name of lists based on their ids
+ * @param array $list_ids
+ */
+function wpcf7_get_list_names(Array $list_ids = array()) {
+	// make sure we have the class loaded
+	$mailpoet_lists = array();
+	if (class_exists( 'WYSIJA' )) {
+		// get MailPoet / Wysija lists
+		$model_list = WYSIJA::get('list','model');
+		$result = $model_list->get( array( 'name' ), array( 'list_id' =>  $list_ids) );
+		foreach ($result as $list) {
+			$mailpoet_lists[] = $list['name'];
+		}
+	}
+	return $mailpoet_lists;
+}
+
+/**
+ * Make sure the current element is mailpoetsignup
+ * @param string $submitted submitted value from contact form
+ * @return boolean
+ */
+function wpcf7_is_mailpoetsignup_element($submitted) {
+	if ( class_exists( 'WPCF7_Submission' ) ) {// for Contact-Form-7 3.9 and above, http://contactform7.com/2014/07/02/contact-form-7-39-beta/
+		$submission = WPCF7_Submission::get_instance();
+		if ( $submission ) {
+			$posted_data = $submission->get_posted_data();
+		}
+	} else {
+		$posted_data = $_POST;
+	}
+	if (!empty($posted_data)) {
+		// find all of the keys in $posted_data that belong to mailpoet-cf7's plugin
+		$keys			 = array_keys($posted_data);
+		$mailpoet_signups = preg_grep("/^mailpoetsignup.*/", $keys);
+		if (!empty($mailpoet_signups)) {
+			foreach ($mailpoet_signups as $mailpoet_signup_field) {
+				$_field = trim($posted_data[$mailpoet_signup_field]);
+				if ($_field == $submitted) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
 // that's all folks!

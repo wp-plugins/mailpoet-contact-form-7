@@ -53,6 +53,9 @@ After installing & activating the plugin it's time to set up your form.
 
 
 == Changelog ==
+= 1.0.5 =
+* Display list names in admin notifications
+
 = 1.0.4 =
 * Fix users are always forced to subscribe to Mailpoet
 
