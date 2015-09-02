@@ -7,7 +7,7 @@ Author: Patrick Rauland
 Author URI: http://www.patrickrauland.com/
 Text Domain: mpcf7
 Domain Path: /languages/
-Version: 1.0.5
+Version: 1.0.6
 */
 
 // require the mailpoet signup field module

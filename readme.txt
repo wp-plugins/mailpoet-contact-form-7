@@ -53,6 +53,10 @@ After installing & activating the plugin it's time to set up your form.
 
 
 == Changelog ==
+= 1.0.6 =
+* Updated tag generator form to new CF7 standard
+* Fixed css id output for signup checkbox
+
 = 1.0.5 =
 * Display list names in admin notifications
 
